@@ -207,7 +207,26 @@ export default function QuizPage() {
       <div className="max-w-3xl mx-auto">
         {/* Header Card */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">{quiz.title}</h1>
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={() => {
+                const hasAnswers = Object.keys(answers).length > 0;
+                if (hasAnswers) {
+                  if (confirm('Are you sure you want to leave the quiz? Your progress will be lost.')) {
+                    router.push('/dashboard');
+                  }
+                } else {
+                  router.push('/dashboard');
+                }
+              }}
+              className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </button>
+            <h1 className="text-2xl font-bold text-gray-900">{quiz.title}</h1>
+            <div className="w-32"></div> {/* Spacer for alignment */}
+          </div>
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-600">
               Question <span className="text-indigo-600 font-bold">{currentQuestion + 1}</span> of {quiz.questions.length}
