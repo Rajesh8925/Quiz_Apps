@@ -2,6 +2,19 @@
 
 A modern, AI-powered quiz application built with Django REST API backend and Next.js frontend.
 
+## ⚠️ Important Security Notice
+
+**This repository contains demonstration credentials for educational purposes only.**
+
+- **API Keys**: You must get your own OpenRouter API key from https://openrouter.ai/keys
+- **Database**: Use your own database credentials or SQLite for local development
+
+
+**For Production:**
+- Use environment variables for all sensitive data
+- Create your own database and API credentials
+- Follow security best practices for credential management
+
 ## Features
 
 - **AI-Powered Quiz Generation**: Generate quizzes on any topic using OpenRouter AI API
@@ -148,12 +161,20 @@ Create a `.env` file in the backend directory:
 # Or PostgreSQL (if you have PostgreSQL installed)
 # DATABASE_URL=postgresql://username:password@localhost:5432/quiz_db
 
+# ⚠️ IMPORTANT: Use your own database!
+# - For local development, SQLite is recommended (no setup needed)
+# - For production, create your own PostgreSQL database
+
 # AI API Configuration
 OPENROUTER_API_KEY=your_openrouter_api_key_here
 
 # Optional: Other API keys (for fallbacks)
 # GEMINI_API_KEY=your_gemini_api_key
 # OPENAI_API_KEY=your_openai_api_key
+
+# ⚠️ IMPORTANT: Get your own API keys!
+# - OpenRouter: https://openrouter.ai/keys
+# - You need your own API keys for the application to work
 
 # Security
 SECRET_KEY=your-secret-key-here (use the default for development)
