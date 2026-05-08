@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-fp2-m_^wwzeeo$5ews2jo1i-)t_%z6aq_e^3&3k8r=%_mk473e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1',  'quiz-apps-3.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'quiz-apps-3.onrender.com', 'quiz-apps-4.onrender.com']
 
 
 # Application definition
@@ -92,11 +92,20 @@ WSGI_APPLICATION = 'quiz_api.wsgi.application'
 #         'PORT': os.getenv('DB_PORT', '5432'),
 #     }
 # }
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL')
-    )
-}
+
+
+# Use SQLite for local development, Neon for production
+if os.getenv("DATABASE_URL"):
+    DATABASES = {
+        'default': dj_database_url.parse(os.getenv("DATABASE_URL"))
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 
@@ -155,6 +164,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3005",
     "https://quiz-apps-4.vercel.app",
     "https://quiz-apps.onrender.com",
+    "https://quiz.apps.vercel.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
