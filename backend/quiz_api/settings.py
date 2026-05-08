@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-fp2-m_^wwzeeo$5ews2jo1i-)t_%z6aq_e^3&3k8r=%_mk473e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'quiz-apps-3.onrender.com', 'quiz-apps-4.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'quiz-apps-3.onrender.com', 'quiz-apps-4.onrender.com', 'quiz-apps-my.onrender.com']
 
 
 # Application definition
@@ -165,6 +165,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://quiz-apps-4.vercel.app",
     "https://quiz-apps.onrender.com",
     "https://quiz.apps.vercel.app",
+    "https://quiz-apps-my.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
