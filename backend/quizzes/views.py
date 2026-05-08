@@ -38,7 +38,7 @@ class OpenRouterClient:
     @classmethod
     def generate_quiz(cls, topic, num_questions, difficulty):
         if not cls.API_KEY:
-            raise Exception("Gemini API key not configured")
+            raise Exception("OpenRouter API key not configured")
 
         prompt = f"""
 Generate a {difficulty} difficulty quiz about "{topic}" with exactly {num_questions} multiple-choice questions.
