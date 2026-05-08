@@ -147,6 +147,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3004",
     "http://localhost:3005",
     "https://quiz-apps-4.vercel.app",
+    "https://quiz-apps.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
