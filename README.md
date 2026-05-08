@@ -77,8 +77,10 @@ ai-quiz-app/
 - Node.js 18+
 - PostgreSQL 12+
 - Google Gemini API key
+  
+## Below setup for localhost
 
-### Backend Setup
+### Backend Setup 
 1. Clone the repository:
    ```bash
    git clone https://github.com/Rajesh8925/Quiz_App.git
@@ -220,7 +222,7 @@ DATABASE_URL=postgresql://user:pass@host:port/dbname
 
 ## Acknowledgments
 
-- **Google Gemini AI** for quiz generation capabilities
+- **Google Gemini AI or OpenRouter** for quiz generation capabilities
 - **Django Team** for excellent web framework
 - **Next.js Team** for React framework
 - **Tailwind CSS** for utility-first CSS framework
