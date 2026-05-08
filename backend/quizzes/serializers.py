@@ -64,8 +64,8 @@ class CreateQuizSerializer(serializers.Serializer):
 
 
 class SubmitAnswerSerializer(serializers.Serializer):
-    question_id = serializers.UUIDField()
-    answer_id = serializers.UUIDField()
+    question_id = serializers.IntegerField()
+    answer_id = serializers.IntegerField()
 
 
 class SubmitQuizSerializer(serializers.Serializer):

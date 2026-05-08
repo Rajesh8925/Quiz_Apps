@@ -34,24 +34,24 @@ A modern, AI-powered quiz application built with Django REST API backend and Nex
 
 ```
 ai-quiz-app/
-├── backend/                 # Django REST API
-│   ├── accounts/           # User authentication
-│   ├── quizzes/            # Quiz models and logic
-│   ├── quiz_api/           # Django settings
-│   ├── requirements.txt      # Python dependencies
-│   ├── manage.py           # Django management
-│   └── start_server.ps1     # Server startup script
-├── frontend/               # Next.js frontend
-│   ├── app/               # Next.js pages
-│   │   ├── create/        # Quiz creation page
-│   │   ├── dashboard/     # User dashboard
-│   │   ├── quiz/[id]/     # Quiz taking interface
-│   │   ├── login/          # User login
-│   │   └── register/       # User registration
-│   ├── components/         # Reusable React components
+├── backend/              # Django REST API
+│   ├── accounts/         # User authentication
+│   ├── quizzes/          # Quiz models and logic
+│   ├── quiz_api/         # Django settings
+│   ├── requirements.txt  # Python dependencies
+│   ├── manage.py         # Django management
+│   └── start_server.ps1  # Server startup script
+├── frontend/             # Next.js frontend
+│   ├── app/              # Next.js pages
+│   │   ├── create/       # Quiz creation page
+│   │   ├── dashboard/    # User dashboard
+│   │   ├── quiz/[id]/    # Quiz taking interface
+│   │   ├── login/        # User login
+│   │   └── register/     # User registration
+│   ├── components/       # Reusable React components
 │   ├── lib/              # API and auth utilities
-│   └── package.json       # Node.js dependencies
-└── README.md              # This file
+│   └── package.json      # Node.js dependencies
+└── README.md            
 ```
 
 ## Tech Stack
@@ -217,9 +217,6 @@ DATABASE_URL=postgresql://user:pass@host:port/dbname
 5. Submit a pull request
 6. Follow the coding standards
 
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## Acknowledgments
 
@@ -232,4 +229,4 @@ This project is open source and available under the [MIT License](LICENSE).
 ---
 
 
-**Built with ❤️ using modern web technologies**
+
