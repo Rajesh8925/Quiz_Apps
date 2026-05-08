@@ -4,7 +4,7 @@ A modern, AI-powered quiz application built with Django REST API backend and Nex
 
 ## Features
 
-- **AI-Powered Quiz Generation**: Generate quizzes on any topic using Google's Gemini AI
+- **AI-Powered Quiz Generation**: Generate quizzes on any topic using OpenRouter AI API
 - **Modern UI**: Beautiful, responsive interface with gradient designs and smooth animations
 - **Real-time Scoring**: Instant quiz evaluation and detailed results
 - **User Authentication**: Secure token-based authentication system
@@ -18,10 +18,46 @@ A modern, AI-powered quiz application built with Django REST API backend and Nex
 - **Framework**: Django 6.0.5 with Django REST Framework
 - **Database**: PostgreSQL
 - **Authentication**: Token-based authentication
-- **AI Integration**: Google Gemini API for quiz generation
+- **AI Integration**: OpenRouter AI API for quiz generation
 - **API Endpoints**:
   - `/api/auth/` - User registration, login, logout
   - `/api/quizzes/` - Quiz CRUD, generation, submission, review
+
+## Database Design Decisions
+
+### Data Models
+
+#### User Management
+- **User**: Django's built-in User model for authentication
+- **UserProfile**: Extended user profile for additional user information
+
+#### Quiz System
+- **Quiz**: Main quiz entity with metadata (title, topic, difficulty, question count)
+- **Question**: Individual questions linked to a quiz with text and order
+- **Answer**: Multiple choice options for each question with correctness flag
+- **QuizAttempt**: Records of user quiz attempts with scores and timestamps
+- **UserAnswer**: Tracks individual answers within each attempt
+
+### Design Rationale
+
+1. **Normalized Structure**: Separated questions and answers for flexibility and data integrity
+2. **Attempt Tracking**: Comprehensive attempt system for analytics and review
+3. **Scalable Architecture**: Designed to handle multiple users, quizzes, and attempts
+4. **Relationship Integrity**: Foreign key constraints ensure data consistency
+
+### Database Schema
+```sql
+-- Users
+User (id, username, email, first_name, last_name)
+UserProfile (id, user_id, created_at, updated_at)
+
+-- Quiz System
+Quiz (id, user_id, title, topic, difficulty, num_questions, created_at)
+Question (id, quiz_id, text, order)
+Answer (id, question_id, text, is_correct, order)
+QuizAttempt (id, user_id, quiz_id, score, total_questions, completed_at)
+UserAnswer (id, attempt_id, question_id, selected_answer_id, is_correct)
+```
 
 ### Frontend (Next.js)
 - **Framework**: Next.js 15 with TypeScript
@@ -70,64 +106,182 @@ ai-quiz-app/
 - **React Hooks** for state management
 - **Axios/Fetch** for API communication
 
-## Getting Started
+## How to Run the Project Locally
 
 ### Prerequisites
-- Python 3.8+
-- Node.js 18+
-- PostgreSQL 12+
-- Google Gemini API key
-  
-## Below setup for localhost
+- **Python 3.8+** - Backend runtime
+- **Node.js 18+** - Frontend runtime
+- **PostgreSQL 12+** - Database (or SQLite for development)
+- **OpenRouter API Key** - AI quiz generation
 
-### Backend Setup 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Rajesh8925/Quiz_App.git
-   cd ai-quiz-app
-   ```
-2. Navigate to backend and create virtual environment:
-   ```bash
-   cd backend
-   python -m venv venv
-   venv\Scripts\activate  # On Windows
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Configure environment:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your database and API credentials
-   ```
-5. Run migrations:
-   ```bash
-   python manage.py migrate
-   ```
-6. Start server:
-   ```bash
-   python manage.py runserver
-   # Or use: .\start_server.ps1
-   ```
+### Step 1: Clone and Setup Repository
+```bash
+git clone https://github.com/Rajesh8925/Quiz_Apps.git
+cd ai-quiz-app
+```
 
-### Frontend Setup
-1. Navigate to frontend:
-   ```bash
-   cd frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Configure environment:
-   ```bash
-   echo "NEXT_PUBLIC_API_URL=http://localhost:8000/api" > .env.local
-   ```
-4. Start development server:
-   ```bash
-   npm run dev
-   ```
+### Step 2: Backend Setup
+
+#### 2.1 Create Virtual Environment
+```bash
+cd backend
+python -m venv venv
+
+# On Windows:
+venv\Scripts\activate
+
+# On Mac/Linux:
+source venv/bin/activate
+```
+
+#### 2.2 Install Python Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+#### 2.3 Configure Environment Variables
+Create a `.env` file in the backend directory:
+```bash
+# Database Configuration (SQLite for local development)
+# DATABASE_URL=sqlite:///db.sqlite3
+
+# Or PostgreSQL (if you have PostgreSQL installed)
+# DATABASE_URL=postgresql://username:password@localhost:5432/quiz_db
+
+# AI API Configuration
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+
+# Optional: Other API keys (for fallbacks)
+# GEMINI_API_KEY=your_gemini_api_key
+# OPENAI_API_KEY=your_openai_api_key
+
+# Security
+SECRET_KEY=your-secret-key-here (use the default for development)
+DEBUG=True
+```
+
+#### 2.4 Database Setup and Migrations
+```bash
+# Create initial migrations
+python manage.py makemigrations
+
+# Apply migrations to create database tables
+python manage.py migrate
+
+# Create a superuser for admin access (optional)
+python manage.py createsuperuser
+```
+
+#### 2.5 Start Backend Server
+```bash
+python manage.py runserver 
+# or ./start_server.bat
+python manage.py runserver 0.0.0.0:8000
+```
+The backend will be available at: `http://localhost:8000`
+
+### Step 3: Frontend Setup
+
+#### 3.1 Install Node.js Dependencies
+```bash
+cd frontend
+npm install
+```
+
+#### 3.2 Configure Frontend Environment
+Create a `.env.local` file in the frontend directory:
+```bash
+# Local development
+NEXT_PUBLIC_API_URL=http://localhost:8000/api
+
+# Or for deployed backend:
+# NEXT_PUBLIC_API_URL=https://your-backend-url.com/api
+```
+
+#### 3.3 Start Frontend Development Server
+```bash
+npm run dev
+```
+The frontend will be available at: `http://localhost:3000`
+
+### Step 4: Test the Complete Application
+
+#### 4.1 Registration and Login
+1. Navigate to `http://localhost:3000`
+2. Click "Sign In" → "Register" 
+3. Create a new account
+4. Login with your credentials
+
+#### 4.2 Quiz Generation
+1. Click "Get Started" (should redirect to quiz creation if logged in)
+2. Fill in quiz details:
+   - Topic: e.g., "JavaScript", "World History", "Biology"
+   - Number of questions: 5, 10, 15, or 20
+   - Difficulty: Easy, Medium, or Hard
+3. Click "Generate Quiz"
+4. Wait for AI to generate questions (30-60 seconds)
+
+#### 4.3 Take Quiz
+1. Answer questions by clicking options
+2. Submit quiz when complete
+3. View results and detailed review
+
+### Step 5: Verify API Endpoints
+Test the backend API directly:
+
+```bash
+# Test registration
+curl -X POST http://localhost:8000/api/auth/register/ \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","email":"test@example.com","password":"TestPass123","password_confirm":"TestPass123"}'
+
+# Test login (after registration)
+curl -X POST http://localhost:8000/api/auth/login/ \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","password":"TestPass123"}'
+
+# Test quiz generation (with authentication token)
+curl -X POST http://localhost:8000/api/quizzes/generate/ \
+  -H "Authorization: Token YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{"topic":"JavaScript","num_questions":5,"difficulty":"medium"}'
+```
+
+### Troubleshooting Common Issues
+
+#### Backend Issues
+- **Port 8000 in use**: Change port with `python manage.py runserver 8001`
+- **Database errors**: Ensure PostgreSQL is running or use SQLite for development
+- **API key errors**: Verify OpenRouter API key in `.env` file
+- **Migration errors**: Delete `db.sqlite3` and re-run migrations
+
+#### Frontend Issues
+- **Port 3000 in use**: Stop other processes or use `npm run dev -- -p 3001`
+- **API connection errors**: Verify `NEXT_PUBLIC_API_URL` in `.env.local`
+- **Build errors**: Run `npm install` to update dependencies
+- **CORS errors**: Ensure backend CORS settings include `http://localhost:3000`
+
+#### Authentication Issues
+- **Registration 404**: Check backend server is running
+- **Login failures**: Verify user exists and credentials are correct
+- **Token errors**: Clear browser localStorage and re-login
+
+### Development Tips
+
+#### Backend Development
+- Use `python manage.py shell` for database debugging
+- Check `python manage.py dbshell` for direct database access
+- Monitor `python manage.py runserver` output for errors
+
+#### Frontend Development
+- Use browser DevTools for API debugging
+- Check Network tab for failed requests
+- Monitor Console for JavaScript errors
+
+#### API Testing
+- Use Postman or Insomnia for API testing
+- Test with curl commands for quick verification
+- Check Django admin at `http://localhost:8000/admin`
 
 ## Configuration
 
@@ -145,22 +299,79 @@ GEMINI_API_KEY=your_gemini_api_key
 NEXT_PUBLIC_API_URL=http://localhost:8000/api
 ```
 
-## API Documentation
+## API Structure
 
-### Authentication Endpoints
+### Authentication API
+**Base URL**: `/api/auth/`
+
+#### Endpoints:
 - `POST /api/auth/register/` - User registration
-- `POST /api/auth/login/` - User login
-- `POST /api/auth/logout/` - User logout
-- `GET /api/auth/profile/` - User profile
+  - **Request**: `{username, email, password, password_confirm}`
+  - **Response**: `{user, token}`
+  - **Status**: 201 Created
 
-### Quiz Endpoints
+- `POST /api/auth/login/` - User login
+  - **Request**: `{username, password}`
+  - **Response**: `{user, token}`
+  - **Status**: 200 OK
+
+- `POST /api/auth/logout/` - User logout
+  - **Headers**: `Authorization: Token <token>`
+  - **Response**: `{message}`
+  - **Status**: 200 OK
+
+- `GET /api/auth/profile/` - User profile
+  - **Headers**: `Authorization: Token <token>`
+  - **Response**: `{id, username, email, first_name, last_name}`
+  - **Status**: 200 OK
+
+### Quiz API
+**Base URL**: `/api/quizzes/`
+
+#### Endpoints:
 - `POST /api/quizzes/generate/` - Generate AI quiz
+  - **Headers**: `Authorization: Token <token>`
+  - **Request**: `{topic, num_questions, difficulty}`
+  - **Response**: `{id, title, topic, difficulty, num_questions, questions}`
+  - **Status**: 201 Created
+
 - `GET /api/quizzes/` - List user quizzes
-- `GET /api/quizzes/{id}/` - Get quiz details
+  - **Headers**: `Authorization: Token <token>`
+  - **Response**: `[{id, title, topic, difficulty, created_at}]`
+  - **Status**: 200 OK
+
+- `GET /api/quizzes/{id}/` - Get quiz details (without answers)
+  - **Headers**: `Authorization: Token <token>`
+  - **Response**: `{id, title, topic, difficulty, questions}`
+  - **Status**: 200 OK
+
 - `POST /api/quizzes/{id}/submit/` - Submit quiz answers
+  - **Headers**: `Authorization: Token <token>`
+  - **Request**: `{answers: [{question_id, answer_id}]}`
+  - **Response**: `{attempt_id, score, total, percentage}`
+  - **Status**: 200 OK
+
 - `GET /api/quizzes/{id}/review/` - Get quiz with correct answers
+  - **Headers**: `Authorization: Token <token>`
+  - **Response**: `{id, title, questions: [{text, answers: [{text, is_correct}]}]}`
+  - **Status**: 200 OK
+
 - `GET /api/quizzes/attempts/` - List quiz attempts
+  - **Headers**: `Authorization: Token <token>`
+  - **Response**: `[{id, quiz_title, score, percentage, completed_at}]`
+  - **Status**: 200 OK
+
 - `GET /api/quizzes/attempts/{id}/` - Get attempt details
+  - **Headers**: `Authorization: Token <token>`
+  - **Response**: `{id, quiz, score, user_answers}`
+  - **Status**: 200 OK
+
+### API Design Principles
+1. **RESTful Architecture**: Clean, resource-based endpoints
+2. **Token Authentication**: Secure API access
+3. **Consistent Responses**: Standardized JSON format
+4. **Error Handling**: Proper HTTP status codes and error messages
+5. **CORS Enabled**: Cross-origin requests supported
 
 ## UI Features
 
@@ -178,6 +389,115 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api
 - **Results Analytics**: Detailed scoring and statistics
 - **Error Handling**: User-friendly error messages
 - **Loading States**: Skeleton loaders and spinners
+- **Safe Navigation**: Back button with progress protection
+- **Exit Confirmation**: Prevents accidental quiz abandonment
+
+## Challenges Faced and Solutions
+
+### 1. Registration 404 Error
+**Problem**: Users couldn't register due to 404 errors on OPTIONS requests
+**Root Cause**: URL mismatch between frontend and backend deployment URLs
+**Solution**: 
+- Updated frontend API URL to match deployed backend URL
+- Added correct URLs to CORS_ALLOWED_ORIGINS and ALLOWED_HOSTS
+- Implemented proper CORS preflight handling
+
+### 2. Authentication Flow Issues
+**Problem**: "Get Started" button led to quiz creation page without authentication
+**Solution**:
+- Added authentication checks in quiz creation page
+- Implemented automatic redirect to login for unauthenticated users
+- Added loading states and smooth transitions
+
+### 3. AI Quiz Generation Failures
+**Problem**: OpenRouter API integration was incorrectly configured
+**Issues Found**:
+- Wrong API URL format (using Gemini's structure instead of OpenRouter's)
+- Incorrect error messages referencing wrong API service
+- Wrong response parsing for OpenRouter's JSON format
+**Solution**:
+- Fixed OpenRouter client to use correct API endpoints and request format
+- Updated error messages to reference correct service
+- Implemented proper fallback chain (OpenRouter → Gemini → OpenAI)
+- Added comprehensive error handling with user-friendly messages
+
+### 4. CORS Configuration Issues
+**Problem**: Cross-origin requests blocked in production
+**Solution**:
+- Added proper CORS middleware configuration
+- Configured allowed origins for development and production
+- Enabled credentials for authenticated requests
+
+### 5. Frontend State Management
+**Problem**: Variable naming conflicts and loading state issues
+**Solution**:
+- Renamed conflicting variables (loading → submitting)
+- Implemented proper loading states for different operations
+- Added timeout protection for API requests
+
+### 6. Quiz Navigation Issues
+**Problem**: Users couldn't exit quiz taking page without completing
+**Solution**:
+- Added back button in quiz header for easy navigation
+- Implemented confirmation dialog when user has answered questions
+- Protected user progress while allowing safe exit
+- Improved overall user experience with intuitive navigation
+
+## Features Implemented vs. Skipped
+
+### ✅ Implemented Features
+1. **User Authentication System**
+   - Registration with email validation
+   - Token-based login/logout
+   - User profile management
+
+2. **AI Quiz Generation**
+   - OpenRouter API integration
+   - Customizable topics and difficulty levels
+   - Multiple question count options
+
+3. **Quiz Taking Interface**
+   - Interactive quiz interface with progress tracking
+   - Real-time answer selection
+   - Score calculation and results display
+   - Back button with progress protection
+   - Confirmation dialog for safe quiz exit
+
+4. **Quiz History and Analytics**
+   - Attempt tracking and history
+   - Detailed quiz review with correct answers
+   - Performance analytics
+
+5. **Modern UI/UX**
+   - Responsive design with Tailwind CSS
+   - Smooth animations and transitions
+   - Error handling and loading states
+
+### 🔄 Features Not Implemented (and Why)
+
+1. **Social Sharing**
+   - **Reason**: Focus on core functionality first
+   - **Future**: Could be added for viral growth
+
+2. **Quiz Categories/Tags**
+   - **Reason**: Topic-based generation sufficient for MVP
+   - **Future**: Better organization for large quiz libraries
+
+3. **Timer Functionality**
+   - **Reason**: Emphasis on learning over speed
+   - **Future**: Optional timed quiz mode
+
+4. **Multiplayer Quizzes**
+   - **Reason**: Complexity beyond current scope
+   - **Future**: Competitive features
+
+5. **Quiz Export/Import**
+   - **Reason**: Internal storage adequate
+   - **Future**: Content portability
+
+6. **Advanced Analytics Dashboard**
+   - **Reason**: Basic history sufficient for MVP
+   - **Future**: Detailed learning insights
 
 ## Development Workflow
 
