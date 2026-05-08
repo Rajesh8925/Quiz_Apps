@@ -4,8 +4,6 @@ A modern, AI-powered quiz application built with Django REST API backend and Nex
 
 ## ⚠️ Important Security Notice
 
-**This repository contains demonstration credentials for educational purposes only.**
-
 - **API Keys**: You must get your own OpenRouter API key from https://openrouter.ai/keys
 - **Database**: Use your own database credentials or SQLite for local development
 
